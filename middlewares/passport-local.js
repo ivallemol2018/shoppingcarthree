@@ -7,7 +7,6 @@ passport.use('login', new LocalStrategy(
   async (username,password,done)=>{
     try{  
 
-
       const user = await getUserByCriteria({username})
 
       if(bcrypt.compareSync(password,user.password)) return done(null,user)
@@ -20,15 +19,21 @@ passport.use('login', new LocalStrategy(
   }
 ))
 
-passport.use('signup', new LocalStrategy(
-  async (username,password,done)=>{
+passport.use('signup', new LocalStrategy({
+    passReqToCallback : true
+  },
+  async (req,username,password,done)=>{
     try{  
+      
+      const {name,address }  = req.body
 
-      const newUser = {username, password: bcrypt.hashSync(password,bcrypt.genSaltSync(10))}
-
-      const user = await createUser(newUser)
-
-      if(user) return done(null,user)
+      newUser = await createUser({username,
+                                  name,
+                                  address,
+                                  password: bcrypt.hashSync(password,bcrypt.genSaltSync(10))
+                                })
+                        
+      return done(null,newUser)
 
     } catch(error){
       return done(null,false,{ message: 'user already exists'})

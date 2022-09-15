@@ -5,5 +5,10 @@ module.exports = {
     userDbEcommerce: 'admin',
     passwordDbEcommerce: 'Daniela10',
     dbEcommerce : 'ecommerce',
-    driverClassName: 'mongo'
+    driverClassName: 'mongo',
+    hostSMTP: 'smtp.ethereal.email',
+    portSMTP: '587',
+    userSTMP: 'coralie.dickinson@ethereal.email',
+    passwordSTMP: 'fm4DKxYmBakfeabDVs',
+    toMail: 'coralie.dickinson@ethereal.email',
   }

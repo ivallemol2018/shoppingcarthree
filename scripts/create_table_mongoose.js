@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const keys = require('../config/keys');
 
 const modelProduct =  mongoose.model('products', mongoose.Schema({
     nombre: { type: String, require: true, max: 250 },
@@ -9,7 +10,7 @@ const modelProduct =  mongoose.model('products', mongoose.Schema({
     stock: { type: Number, require: true }
   }))
 
-mongoose.connect('mongodb://localhost:27017/test');
+mongoose.connect(keys.hostDbEcommerce);
  
 const Products = [
   {"id":1,"timestamp":"6/22/2022 3:06:27 AM","nombre":"Lenovo IdeaPad 3","description":"Lenovo IdeaPad 3","codigo":"4256","foto":"https://m.media-amazon.com/images/I/71eLIuDmIgL._AC_SL1500_.jpg","precio":483,"stock":20},
@@ -21,7 +22,7 @@ const Products = [
 Products.forEach((product) => {
   const productModel = new modelProduct(product)
   productModel.save()
-  .then(()=> console.log('Se guardo el student',product.name))
+  .then(()=> console.log('Se guardo el producto',product.nombre))
   .catch((e) => console.log('Error', e))  
 })
 

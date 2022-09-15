@@ -2,6 +2,7 @@ const express = require('express')
 const Product = require('../models/Product')
 const NotFoundError = require('../exceptions/NotFoundError')
 const requireLogin = require('../middlewares/requireLogin');
+const logger = require('../utils/log4').getLogger("error")
 
 const { getProducts, getProductById, saveProduct, deleteProductById, updateProduct} = require('../services/productServices')
 
@@ -15,6 +16,7 @@ router.get('/',async (request,response)=>{
     const products = await getProducts()
     response.json(products)
   }catch(error){
+    logger.error(error)
     return response.status(500).json({errors:[error]})
   }
 })
@@ -26,9 +28,11 @@ router.get('/:id',async (request,response)=>{
     response.json(product)
 
   } catch(error){
+    logger.error(error)
     if(error instanceof NotFoundError ){
       return response.status(404).json(error)
     }
+
     return response.status(500).json({errors: [error]})
   } 
 })
@@ -46,6 +50,7 @@ router.post('/',requireLogin,async (request,response)=>{
     return response.status(200).json({success: true, message:'Producto registrado', id: product.id})
 
   } catch(error){
+    logger.error(error)
     return response.status(500).json({errors: [error]})
   }
 })
@@ -64,6 +69,7 @@ router.put('/:id',requireLogin,async (request,response)=>{
 
     return response.status(200).json({success: true, message: 'Producto registrado', id: product.id})
   } catch(error){
+    logger.error(error)
     if(error instanceof NotFoundError ){
       return response.status(404).json(error)
     }
@@ -81,7 +87,8 @@ router.delete('/:id',requireLogin,async (request,response)=>{
     const products = await getProducts()
 
     return response.status(200).json({products, success:true, message: 'Producto eliminado'})
-  } catch(e){
+  } catch(error){
+    logger.error(error)
     if(error instanceof NotFoundError ){
       return response.status(404).json(error)
     }

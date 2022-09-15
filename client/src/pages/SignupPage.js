@@ -29,6 +29,8 @@ const SignupPage = () => {
             initialValues={{
                 username:'',
                 password:'',
+                name:'',
+                address:'',
             }}
             onSubmit={onSubmit}
         >
@@ -74,6 +76,7 @@ const SignupPage = () => {
                   </div>
 
               </div>
+
               <div className="flex flex-col mb-6">
                   <label for="password" className="mb-1 text-xs sm:text-sm tracking-wide text-gray-600">Password</label>
                     <div className="relative">
@@ -112,8 +115,88 @@ const SignupPage = () => {
                         />
                   </div>
               </div>
+
+              <div className="flex flex-col mb-6">
+                  <label for="name" className="mb-1 text-xs sm:text-sm tracking-wide text-gray-600">Name</label>
+                    <div className="relative">
+                        <div className="
+                          inline-flex
+                          items-center
+                          justify-center
+                          absolute
+                          left-0
+                          top-0
+                          h-full
+                          w-10
+                          text-gray-400
+                        ">
+                          <span>
+                            <i className="fas fa-lock text-blue-500"></i>
+                          </span>
+                        </div>                  
+                        <input 
+                        className="
+                          text-sm
+                          placeholder-gray-500
+                          pl-10
+                          pr-4
+                          rounded-2xl
+                          border border-gray-400
+                          w-full
+                          py-2
+                          focus:outline-none focus:border-blue-400"
+                        name="name"
+                        value={values.name}
+                        onChange={handleChange}
+                        required
+                        type="text"
+                        placeholder="Enter your name"
+                        />
+                  </div>
+              </div>  
+
+              <div className="flex flex-col mb-6">
+                  <label for="address" className="mb-1 text-xs sm:text-sm tracking-wide text-gray-600">Address</label>
+                    <div className="relative">
+                        <div className="
+                          inline-flex
+                          items-center
+                          justify-center
+                          absolute
+                          left-0
+                          top-0
+                          h-full
+                          w-10
+                          text-gray-400
+                        ">
+                          <span>
+                            <i className="fas fa-lock text-blue-500"></i>
+                          </span>
+                        </div>                  
+                        <input 
+                        className="
+                          text-sm
+                          placeholder-gray-500
+                          pl-10
+                          pr-4
+                          rounded-2xl
+                          border border-gray-400
+                          w-full
+                          py-2
+                          focus:outline-none focus:border-blue-400"
+                        name="address"
+                        value={values.address}
+                        onChange={handleChange}
+                        required
+                        type="text"
+                        placeholder="Enter your address"
+                        />
+                  </div>
+              </div>         
+
               <div className="mt-4 text-xl sm:text-sm text-red-500">
-              </div>                          
+              </div> 
+
               <div className="flex w-full">
                   <button 
                     className="

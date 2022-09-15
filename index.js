@@ -10,12 +10,15 @@ const keys = require('./config/keys');
 
 const apiProduct = require('./routes/productRoutes')
 const apiShoppingCart = require('./routes/shoppingCartRoutes')
+const sendEmail = require('./utils/email')
 
 const app = express()
 
 const PORT = process.env.PORT || 8080
 
 app.use(bodyParser.json());
+
+
 
 app.use(session({
   store: new MongoStore({
@@ -30,6 +33,11 @@ app.use(session({
 app.use(passport.initialize())
 app.use(passport.session())
 
+app.use((request,response,next)=>{
+  logger.info('Path :' + request.path + ' Method:' + request.method)
+  next();
+})
+
 app.use('/api/productos',apiProduct)
 app.use('/api/carrito',apiShoppingCart)
 
@@ -37,6 +45,7 @@ app.post(
   '/api/login',
   passport.authenticate('login', { failureRedirect: '/', failureMessage: true}),
   (request,response)=>{
+
     const {username} = request.body
 
     request.session.username = username
@@ -61,9 +70,16 @@ app.post(
 
     request.session.username = username
 
+    sendEmail({username})
+
+
     response.status(200).json({message:'succesful',username})
 })
 
+app.use((request,response,next)=>{
+  loggerNotFound.warn('Path :' + request.path + ' Method:' + request.method)
+  next()
+})
 
 if(process.env.NODE_ENV === 'production'){
   //Express will serve up production assets

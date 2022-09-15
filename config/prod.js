@@ -6,5 +6,11 @@ module.exports = {
   userDbEcommerce: process.env.USER_DB_ECOMMERCE,
   passwordDbEcommerce: process.env.PASSWORD_DB_ECOMMERCE,
   dbEcommerce : process.env.DB_ECOMMERCE,
-  driverClassName: process.env.DRIVER_CLASS_NAME
+  driverClassName: process.env.DRIVER_CLASS_NAME,
+  hostSMTP: process.env.HOST_STMP,
+  portSMTP: process.env.PORT_STMP,
+  userSTMP: process.env.USER_STMP,
+  passwordSTMP: process.env.PASSWORD_STMP,
+  toMail: process.env.TO_MAIL,
+  
 }

@@ -21,6 +21,7 @@ router.get('/:id/products', async(request,response)=>{
   
     response.json(cart.products)
   }catch(error){
+    logger.error(error)
     return response.status(500).json({errors:[error]})
   }
 })
@@ -33,6 +34,7 @@ router.post('/',async (request,response)=>{
 
     response.json(shoppingCartResponse)
   }catch(error){
+    logger.error(error)
     return response.status(500).json({errors:[error]})
   }    
 })
@@ -46,6 +48,7 @@ router.post('/:id/products',async (request,response)=>{
 
     response.json(shoppingCartResponse)    
   }catch(error){
+    logger.error(error)
     return response.status(500).json({errors:[error]})
   }  
 })
@@ -59,6 +62,7 @@ router.delete('/:id',async (request,response)=>{
     response.json({'message':'carrito se elimino'}) 
 
   }catch(error){
+    logger.error(error)
     if(error instanceof NotFoundError ){
       return response.status(404).json(error)
     }    
@@ -75,6 +79,7 @@ router.delete('/:id/products/:idProducto',async (request,response)=>{
     response.json(shoppingCartResponse) 
 
   }catch(error){
+    logger.error(error)
     if(error instanceof NotFoundError ){
       return response.status(404).json(error)
     }    
