@@ -10,6 +10,7 @@ const keys = require('./config/keys');
 
 const apiProduct = require('./routes/productRoutes')
 const apiShoppingCart = require('./routes/shoppingCartRoutes')
+const apiOrder = require('./routes/orderRoutes')
 const sendEmail = require('./utils/email')
 
 const app = express()
@@ -40,17 +41,19 @@ app.use((request,response,next)=>{
 
 app.use('/api/productos',apiProduct)
 app.use('/api/carrito',apiShoppingCart)
+app.use('/api/order',apiOrder)
+
 
 app.post(
   '/api/login',
-  passport.authenticate('login', { failureRedirect: '/', failureMessage: true}),
+  passport.authenticate('login'),
   (request,response)=>{
 
-    const {username} = request.body
+    const {username,name,phone} = request.user
 
     request.session.username = username
 
-    response.status(200).json({message:'succesful',username})
+    response.status(200).json({message:'succesful',username,name,phone})
 })
 
 app.post(
@@ -64,16 +67,16 @@ app.post(
 
 app.post(
   '/api/signup',
-  passport.authenticate('signup',{ failureRedirect: '/signup', failureMessage: true}),
+  passport.authenticate('signup'),
   (request,response)=>{
-    const {username} = request.body
+    const {username,name,phone} = request.user
 
     request.session.username = username
 
-    sendEmail({username})
+    sendEmail({username,name},'Nuevo registro','email.newregister.template.ejs')
 
 
-    response.status(200).json({message:'succesful',username})
+    response.status(200).json({message:'succesful',username,name,phone})
 })
 
 app.use((request,response,next)=>{

@@ -6,6 +6,7 @@ const usersModel = mongoose.model('users', mongoose.Schema({
   name: { type: String, require: true, max: 250 },
   address: { type: String, require: true, max: 250 },
   phone: { type: String, require: true, max: 250 },
+  age: { type: Number, require: true },
 }))
 
 module.exports = usersModel

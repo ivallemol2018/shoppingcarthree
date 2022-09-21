@@ -5,7 +5,7 @@ import { useCartContext } from '../context/CartContext'
 
 const LoginPage = () => {
 
-  const { login } = useCartContext();
+  const { login, error} = useCartContext();
 
   const onSubmit = (register) =>{
         login(register)
@@ -107,6 +107,7 @@ const LoginPage = () => {
                     </div>
                 </div>
                 <div className="mt-4 text-xl sm:text-sm text-red-500">
+                { (typeof error.message === 'undefined') ? '' : error.message  }
                 </div>                        
                 <div className="flex w-full" >
                     <button 

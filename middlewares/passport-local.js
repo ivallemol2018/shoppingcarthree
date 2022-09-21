@@ -14,6 +14,7 @@ passport.use('login', new LocalStrategy(
       return done(null,false, { message: 'user or password are incorrect'})
 
     } catch(error){
+
       return done(null,false, { message: 'user or password are incorrect'})
     }    
   }
@@ -24,12 +25,14 @@ passport.use('signup', new LocalStrategy({
   },
   async (req,username,password,done)=>{
     try{  
-      
-      const {name,address }  = req.body
+
+      const {name,address,age,phone }  = req.body
 
       newUser = await createUser({username,
                                   name,
                                   address,
+                                  age,
+                                  phone,
                                   password: bcrypt.hashSync(password,bcrypt.genSaltSync(10))
                                 })
                         

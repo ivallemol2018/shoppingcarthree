@@ -60,7 +60,7 @@ const NavBar = () => {
             }
             { 
                 (typeof user.username !== 'undefined')? 
-                    <span className='ml-5'>{`Bienevenida: ${user.username}`}</span> : null  
+                    <span className='ml-5'>{`Bienvenido: ${user.name}`}</span> : null  
             }      
             </div>
             <CartWidget />

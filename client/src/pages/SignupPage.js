@@ -1,14 +1,27 @@
-import React from 'react'
+import React,{useState} from 'react'
 import {Formik} from 'formik'
 import { useCartContext } from '../context/CartContext'
+import Thumb from '../components/Util/Thumb';
+import 'react-phone-number-input/style.css'
+import PhoneInput from 'react-phone-number-input'
 
 const SignupPage = () => {
 
-  const { signup } = useCartContext();
+  const { signup, error } = useCartContext();
+  const [phone, setPhone] = useState()
 
+  const onSubmit = (values) =>{
 
-  const onSubmit = (register) =>{
-      signup(register)
+      //let formData = new FormData();
+
+      //formData.append("image", values.file);
+      //for (let value in values) {
+      //  formData.append(value, values[value]);
+      //}
+
+      values = {...values,phone}
+    
+      signup(values)
   }
 
   return (
@@ -31,10 +44,12 @@ const SignupPage = () => {
                 password:'',
                 name:'',
                 address:'',
+                age: null,
+                file: null,
             }}
             onSubmit={onSubmit}
         >
-            {({values,handleSubmit,handleChange,handleBlur})=>(
+            {({values,handleSubmit,handleChange,setFieldValue})=>(
           <form onSubmit={handleSubmit}>
               <div className="flex flex-col mb-5">
                   <label for="username" className="mb-1 text-xs tracking-wide text-gray-600">Username</label>
@@ -153,7 +168,59 @@ const SignupPage = () => {
                         placeholder="Enter your name"
                         />
                   </div>
-              </div>  
+              </div>
+
+              <div className="flex flex-col mb-6">
+              <label for="name" className="mb-1 text-xs sm:text-sm tracking-wide text-gray-600">Phone</label>
+                    <div className="relative">
+                    {
+                      <PhoneInput
+                      placeholder="Enter phone number"
+                      value={phone}
+                      onChange={setPhone}/>
+                    }  
+                    </div>   
+              </div>
+
+              <div className="flex flex-col mb-6">
+                  <label for="address" className="mb-1 text-xs sm:text-sm tracking-wide text-gray-600">Age</label>
+                    <div className="relative">
+                        <div className="
+                          inline-flex
+                          items-center
+                          justify-center
+                          absolute
+                          left-0
+                          top-0
+                          h-full
+                          w-10
+                          text-gray-400
+                        ">
+                          <span>
+                            <i className="fas fa-lock text-blue-500"></i>
+                          </span>
+                        </div>                  
+                        <input 
+                        className="
+                          text-sm
+                          placeholder-gray-500
+                          pl-10
+                          pr-4
+                          rounded-2xl
+                          border border-gray-400
+                          w-full
+                          py-2
+                          focus:outline-none focus:border-blue-400"
+                        name="age"
+                        value={values.age}
+                        onChange={handleChange}
+                        required
+                        type="number"
+                        placeholder="Enter your age"
+                        />
+                  </div>
+              </div>
+
 
               <div className="flex flex-col mb-6">
                   <label for="address" className="mb-1 text-xs sm:text-sm tracking-wide text-gray-600">Address</label>
@@ -192,9 +259,32 @@ const SignupPage = () => {
                         placeholder="Enter your address"
                         />
                   </div>
-              </div>         
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700">Cover photo</label>
+                <div className="mt-1 flex justify-center rounded-md border-2 border-dashed border-gray-300 px-6 pt-5 pb-6">
+                  <div className="space-y-1 text-center">
+                    <svg className="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
+                      <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                    <div className="flex text-sm text-gray-600">
+                      <label for="file" cfileUploadlass="relative cursor-pointer rounded-md bg-white font-medium text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-500 focus-within:ring-offset-2 hover:text-indigo-500">
+                        <span>Upload a file</span>
+                        <input id="file" name="file" type="file" class="sr-only" onChange={(event) => {
+                          setFieldValue("file", event.currentTarget.files[0]);
+                        }}/>
+                      </label>
+                      <p className="pl-1">or drag and drop</p>
+                    </div>
+                    <p className="text-xs text-gray-500">PNG, JPG, GIF up to 10MB</p>
+                  </div>
+                </div>
+                <Thumb file={values.file} />
+              </div>
 
               <div className="mt-4 text-xl sm:text-sm text-red-500">
+                { (typeof error.message === 'undefined') ? '' : error.message  }
               </div> 
 
               <div className="flex w-full">

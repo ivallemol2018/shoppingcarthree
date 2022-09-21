@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import React, { useState } from 'react'
 import { useForm } from "react-hook-form"
 //Componentes
@@ -29,12 +29,26 @@ import CartScss from './Cart.scss'
 
 const CartWidget = () => {
 
-    const { cartList, removeOne, emptyCart, totalAmount } = useCartContext();
+    const { user, cartList, removeOne, emptyCart, totalAmount, processOrder } = useCartContext();
     const [openModal, setOpenModal] = useState(false);
-    const [successOrder, setSuccessOrder] = useState();
+    const [successOrder, setSuccessOrder] = useState(false);
     const { register, handleSubmit, formState: { errors } } = useForm();
 
+    const navigate = useNavigate ();
 
+    const onProccess = () =>{
+        if(typeof user.username !== 'undefined')
+            setOpenModal(true)
+        else
+            navigate("/login");
+    }
+
+    const onSubmit = async ( ) => {
+        const response = await processOrder()
+
+        if(response.status === 200) setSuccessOrder(true)
+
+    }
 
     return (
         <>
@@ -77,7 +91,7 @@ const CartWidget = () => {
                             <TableRow>
                                 <TableCell colSpan={2}>Total</TableCell>
                                 <TableCell align="right">$ {totalAmount()}</TableCell>
-                                <TableCell align="right"><Link to={'/'}><Button variant="outlined">Seguir comprando</Button></Link></TableCell>
+                                <TableCell align="right"><Button variant="outlined" onClick={onProccess}>Realizar compra</Button></TableCell>
                             </TableRow>
                             </TableBody>
                         </Table>
@@ -91,8 +105,51 @@ const CartWidget = () => {
                         </div>}
                     </>
             </div>
+            <Modal handleClose={() => setOpenModal(false)} open={openModal}>
+            {successOrder ? (
+                <div>
+                        <h3>Orden registrada</h3>
+                        <img src={Check} alt='icono de verificacion'/>
+                        <Link to='/'>
+                            <Button variant="outlined" onClick={emptyCart}>Aceptar</Button>
+                        </Link>
+                </div>
+            ) : (
+                <>
+                <form onSubmit={handleSubmit(onSubmit)}>
+                <div className="overflow-hidden bg-white shadow sm:rounded-lg">
+                    <div className="px-4 py-5 sm:px-6">
+                        <h3 className="text-lg font-medium leading-6 text-gray-900">RESUMEN DE TU PEDIDO</h3>
+                    </div>
+                    <div className="border-t border-gray-200">
+                    <dl>
+                    <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                        <dt className="text-sm font-medium text-gray-500">Name</dt>
+                        <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">{user.name}</dd>
+                    </div>
+                    <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                        <dt className="text-sm font-medium text-gray-500">Email address</dt>
+                        <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">{user.username}</dd>
+                    </div>
+                    <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                        <dt className="text-sm font-medium text-gray-500">phone</dt>
+                        <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">{user.phone}</dd>
+                    </div>
+                    <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                        <dt className="text-sm font-medium text-gray-500">Total</dt>
+                        <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">$ {totalAmount()}</dd>
+                    </div>
+                    </dl>
+                </div>
+                </div>
+                    <div className='fieldset'>
+                        <Button variant="outlined" type="submit">Finalizar</Button>
+                    </div>
+                </form>
+                </>
+            )}
+            </Modal>            
         </>
-    )
-}
+    )}
 
 export default CartWidget;

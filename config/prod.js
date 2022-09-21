@@ -11,6 +11,8 @@ module.exports = {
   portSMTP: process.env.PORT_STMP,
   userSTMP: process.env.USER_STMP,
   passwordSTMP: process.env.PASSWORD_STMP,
-  toMail: process.env.TO_MAIL,
-  
+  toMailAdmin: process.env.TO_MAIL_ADMIN,
+  accountTwilio: process.env.ACCOUNT_TWILIO,
+  tokenTwilio: process.env.TOKEN_TWILIO,
+  phoneFromTwilio: process.env.PHONE_FROM_TWILIO,
 }

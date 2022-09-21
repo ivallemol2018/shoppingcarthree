@@ -7,6 +7,7 @@ import deleteProductShoppingCart from '../helpers/deleteProductShoppingCart'
 import postLogin from "../helpers/postLogin"
 import postLogout from "../helpers/postLogout"
 import postSignup from "../helpers/postSignup"
+import postOrder from "../helpers/postOrder"
 
 const CartContext = createContext([]);
 
@@ -16,6 +17,7 @@ export function CartContextProvider({children}) {
 
     const [cartList, setCartList] = useState ({});
     const [user, setUser] = useState ({});
+    const [error, setError] = useState ({});
     
     const navigate = useNavigate ();  
 
@@ -66,6 +68,8 @@ export function CartContextProvider({children}) {
     }
 
     const totalAmount = () => {
+        if(typeof cartList.id === 'undefined') return 0
+
         return cartList.products.reduce((acum, item) => acum = acum + (item.precio * item.quantity), 0);
     }
 
@@ -74,9 +78,12 @@ export function CartContextProvider({children}) {
     }
 
     const login = (register) =>{
-        postLogin(register).then( (response) => {
-            setUser({username: register.username})
+        postLogin(register).then( ({username,name,phone}) => {
+            setUser({username,name,phone})
+            setError({})
             navigate("/");  
+        }).catch((error)=>{
+            if(error.response.status===401) setError({message: 'ther user or password are incorrect'})
         })
     }
 
@@ -87,20 +94,33 @@ export function CartContextProvider({children}) {
     }
 
     const signup = (register) =>{
-        postSignup(register).then( (response) => {
-            setUser({username: register.username})
+        postSignup(register).then( ({username,name,phone}) => {
+            setUser({username,name,phone})
+            setError({})
             navigate("/");  
+        }).catch((error)=>{
+            if(error.response.status===401) setError({message: 'There is exists a account register'})
         })
+    }
+
+    const processOrder = async () =>{
+        let prevOrder = { ...cartList, buyer: user }
+
+        const response = await postOrder(prevOrder);
+
+        return response
     }
 
     return <CartContext.Provider value={{
         cartList,
         user,
+        error,
         addToCart,
         emptyCart,
         removeOne,
         totalAmount,
         quantity,
+        processOrder,
         login,
         logout,
         signup

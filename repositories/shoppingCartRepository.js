@@ -23,7 +23,7 @@ const save = async (shoppingCart) =>{
   try{
     return await shoppingCarts.save(shoppingCart.toJSON())
   }catch(error){
-    console.log(error)
+
     throw 'There was an error trying to save the shoppingCart'
   }
 }
