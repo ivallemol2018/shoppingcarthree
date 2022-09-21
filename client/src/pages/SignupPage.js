@@ -1,4 +1,5 @@
 import React,{useState} from 'react'
+import { Link  } from 'react-router-dom'
 import {Formik} from 'formik'
 import { useCartContext } from '../context/CartContext'
 import Thumb from '../components/Util/Thumb';
@@ -332,14 +333,11 @@ const SignupPage = () => {
           text-xs text-center
         "
       >
-        <span className="ml-2"
-          >You have an account?
-          <a
-            href="/"
-            className="text-xs ml-2 text-blue-500 font-semibold"
-            >Login here</a
-          ></span
-        >
+        <span className="ml-2">You have an account?
+          <Link to={'/login'}> 
+          <span className="text-sm ml-2 text-blue-500 font-semibold">Login here</span>
+          </Link>
+      </span>
       </a>
     </div>    
 </div>
